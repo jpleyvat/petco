@@ -3,14 +3,21 @@ import axios from "axios";
 export const state = () => ({
   dogs: [],
   breeds: [],
+  query: "",
 });
 
 export const mutations = {
-  setDogs(state, dog) {
+  addDogs(state, dog) {
     state.dogs.push(dog);
+  },
+  setDogs(state, dogs) {
+    state.dogs = dogs;
   },
   setBreeds(state, breeds) {
     state.breeds = breeds;
+  },
+  setQuery(state, query) {
+    state.query = query;
   },
 };
 
@@ -19,29 +26,48 @@ export const actions = {
     await dispatch("fetchBreeds");
   },
 
+  cleanDogs({ commit }) {
+    commit("setDogs", []);
+  },
+
   // Fetch
   fetchBreeds({ commit }) {
-    return axios.get("https://dog.ceo/api/breeds/list/all").then((data) => {
-      const breeds = [];
-      const obj = data.data.message;
-      for (let key in obj) {
-        if (obj[key].length > 0) {
-          for (let breed in obj[key]) {
-            breeds.push(key.toString() + " " + obj[key][breed]);
+    return axios
+      .get("https://dog.ceo/api/breeds/list/all")
+      .then((data) => data.data.message)
+      .then((breeds_object) => {
+        const breeds = [];
+        for (let key in breeds_object) {
+          const all_breeds = breeds_object[key];
+          if (all_breeds.length > 0) {
+            for (let breed in all_breeds[key]) {
+              breeds.push(key.toString() + " " + breeds_object[key][breed]);
+            }
+            continue;
           }
+          breeds.push(key.toString());
         }
-      }
-      commit("setBreeds", breeds);
-    });
+        commit("setBreeds", breeds);
+      });
   },
 
   fetchRandomDog() {
-    return axios.get("https://dog.ceo/api/breeds/image/random");
+    const url = "https://dog.ceo/api/breeds/image/random";
+    return axios.get(url);
+  },
+
+  fetchByBreed(context, breed) {
+    const url = `https://dog.ceo/api/breed/${breed}/images/random`;
+    return axios.get(url);
   },
 
   // Setters
   addDog({ commit, dispatch }, src) {
-    dispatch("getDogWithBreed", src).then((dog) => commit("setDogs", dog));
+    dispatch("getDogWithBreed", src).then((dog) => commit("addDogs", dog));
+  },
+
+  addQuery({ commit }, query) {
+    commit("setQuery", query);
   },
 
   // Getters
@@ -56,5 +82,9 @@ export const actions = {
 
   getBreeds({ state }) {
     return state.breeds;
+  },
+
+  getQuery({ state }) {
+    return state.query;
   },
 };

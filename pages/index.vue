@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <Logo></Logo>
-    <Search></Search>
-    <ul>
+    <Search :setDogs="setDogs"></Search>
+    <ul id="cards">
       <li v-for="dog of dogs">
         <Card :src="dog.src" :breed="dog.breed"></Card>
       </li>
@@ -33,6 +33,9 @@ export default {
   fetchOnServer: false,
   methods: {
     ...mapActions(["fetchRandomDog", "addDog", "getDogs"]),
+    setDogs() {
+      this.getDogs().then((dogs) => (this.dogs = dogs));
+    },
   },
 };
 </script>

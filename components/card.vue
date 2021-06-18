@@ -17,20 +17,37 @@ export default {
     breed: String,
   },
   mounted() {
-    const observer = new window.IntersectionObserver((entries) => {
-      const { isIntersecting } = entries[0];
-      if (isIntersecting) {
-        this.fetchRandomDog()
-          .then((res) => res.data.message)
-          .then((data) => this.addDog(data));
-        this.getDogs().then((dogs) => (this.dogs = dogs));
-      }
-    });
+    const observer = this.getObserver();
+    observer.observe(this.$el);
+  },
+  updated() {
+    const observer = this.getObserver();
     observer.observe(this.$el);
   },
   fetchOnServer: false,
   methods: {
-    ...mapActions(["fetchRandomDog", "addDog", "getDogs"]),
+    ...mapActions([
+      "fetchRandomDog",
+      "fetchByBreed",
+      "addDog",
+      "getDogs",
+      "getQuery",
+      "getObserver",
+    ]),
+    getObserver() {
+      return new window.IntersectionObserver((entries) => {
+        const { isIntersecting } = entries[0];
+        if (isIntersecting) {
+          this.getQuery().then((query) => {
+            const fetch = query ? this.fetchByBreed : this.fetchRandomDog;
+            fetch(query)
+              .then((res) => res.data.message)
+              .then((data) => this.addDog(data));
+            this.getDogs().then((dogs) => (this.dogs = dogs));
+          });
+        }
+      });
+    },
   },
 };
 </script>

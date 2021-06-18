@@ -29,11 +29,15 @@
 }
 /* -----------------#------------------ */
 #search {
-  width: 85vw;
+  /* width: 85vw; */
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   margin: 5rem 0;
+  width: 100vw;
+  position: absolute;
+  top: 20%;
 }
 
 #search input {
@@ -44,11 +48,12 @@
   font-weight: 300;
   line-height: 1.5;
   color: rgb(107, 115, 120);
-  background-color: rgba(95, 36, 159, 0.25);
+  background-color: #d7c8e7;
   background-clip: padding-box;
   border: 0px solid #ced4da;
-  border-radius: 1rem;
   padding: 03rem;
+  position: relative;
+  z-index: 2;
 }
 
 #search input:focus {
@@ -59,32 +64,48 @@
   outline: 0;
 }
 
-#search::after {
-  content: "";
-  background: url("https://i.imgur.com/Ar9vFiz.png");
-  position: absolute;
-  right: 6rem;
-  height: 4rem;
-  width: 4rem;
-  background-repeat: no-repeat;
-  background-size: cover;
+#search ul {
+  width: 100%;
+  background: #d7c8e7;
+  align-items: center;
+  padding-top: 1rem;
+  position: relative;
+  top: -1rem;
+  z-index: 1;
+  max-height: 80vh;
+  overflow: scroll;
+}
+
+#search ul li {
+  font-size: 2.5rem;
+  text-align: center;
+  text-transform: capitalize;
+  padding: 0.5rem;
   cursor: pointer;
+}
+
+#search ul li:nth-child(odd) {
+  background-color: #bda4d8;
 }
 /* -----------------#------------------ */
 
+#cards {
+  position: absolute;
+  top: 35%;
+}
 .card {
   display: flex;
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  max-width: 70vw;
+  /* max-width: 90vw; */
   margin: 3rem;
 }
 
 .card img {
   object-fit: cover;
-  width: 70vw;
-  height: 70vw;
+  width: 90vw;
+  height: 90vw;
   border-radius: 0.5rem 5rem 0 0;
 }
 
