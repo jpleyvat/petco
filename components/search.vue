@@ -64,10 +64,13 @@ export default {
     },
 
     selectBreed(e) {
-      const value = e.explicitOriginalTarget.data
-        ? e.explicitOriginalTarget.data.replace(/ /g, "").replace("\n", "")
-        : "";
-      e.target.value = value.replace(/\b\w/g, (c) => c.toUpperCase());
+      let value = "";
+      try {
+        value = e.explicitOriginalTarget.data
+          ? e.explicitOriginalTarget.data.replace(/ /g, "").replace("\n", "")
+          : "";
+        e.target.value = value.replace(/\b\w/g, (c) => c.toUpperCase());
+      } catch {}
       if (value) this.search(value);
       this.clean(e);
     },

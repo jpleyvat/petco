@@ -180,12 +180,12 @@
 }
 /* -----------------#------------------ */
 #error {
-  color: #999;
-  text-align: center;
-  height: 40vh;
-  display: flex;
   align-items: center;
+  color: #999;
+  display: flex;
   font-size: 4rem;
+  height: 40vh;
+  text-align: center;
 }
 /* -----------------#------------------ */
 
