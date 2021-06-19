@@ -87,7 +87,8 @@ export default {
           .then((data) => {
             this.addDog(data);
             this.setDogs();
-          });
+          })
+          .catch((error) => this.setDogs());
       });
     },
   },

@@ -53,7 +53,8 @@ export default {
             const fetch = query ? this.fetchByBreed : this.fetchRandomDog;
             fetch(query)
               .then((res) => res.data.message)
-              .then((data) => this.addDog(data));
+              .then((data) => this.addDog(data))
+              .catch((error) => {});
             this.getDogs().then((dogs) => (this.dogs = dogs));
           });
         }

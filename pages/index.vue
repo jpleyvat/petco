@@ -2,42 +2,17 @@
   <div id="app">
     <Logo></Logo>
     <Search :setDogs="setDogs"></Search>
-    <div id="container">
-      <ul class="cards" id="1">
-        <li v-for="dog of dogs[1]">
-          <Card :src="dog.src" :breed="dog.breed"></Card>
-        </li>
-      </ul>
-      <ul class="cards" id="2">
-        <li v-for="dog of dogs[2]">
-          <Card :src="dog.src" :breed="dog.breed"></Card>
-        </li>
-      </ul>
-      <ul class="cards" id="3">
-        <li v-for="dog of dogs[3]">
-          <Card :src="dog.src" :breed="dog.breed"></Card>
-        </li>
-      </ul>
-      <ul class="cards" id="4">
-        <li v-for="dog of dogs[4]">
-          <Card :src="dog.src" :breed="dog.breed"></Card>
-        </li>
-      </ul>
-      <ul class="cards" id="5">
-        <li v-for="dog of dogs[5]">
-          <Card :src="dog.src" :breed="dog.breed"></Card>
-        </li>
-      </ul>
-      <ul class="cards" id="6">
-        <li v-for="dog of dogs[6]">
-          <Card :src="dog.src" :breed="dog.breed"></Card>
-        </li>
-      </ul>
-      <ul class="cards" id="7">
-        <li v-for="dog of dogs[7]">
-          <Card :src="dog.src" :breed="dog.breed"></Card>
-        </li>
-      </ul>
+    <div id="container" v-if="!error">
+      <container :id="1" :dogs="dogs[1]"></container>
+      <container :id="2" :dogs="dogs[2]"></container>
+      <container :id="3" :dogs="dogs[3]"></container>
+      <container :id="4" :dogs="dogs[4]"></container>
+      <container :id="5" :dogs="dogs[5]"></container>
+      <container :id="6" :dogs="dogs[6]"></container>
+      <container :id="7" :dogs="dogs[7]"></container>
+    </div>
+    <div id="container" v-if="error">
+      <Error></Error>
     </div>
   </div>
 </template>
@@ -54,6 +29,7 @@ export default {
   data() {
     return {
       dogs: {},
+      error: false,
     };
   },
   fetch() {
@@ -68,9 +44,11 @@ export default {
   methods: {
     ...mapActions(["fetchRandomDog", "addDog", "getDogs"]),
     setDogs() {
-      this.getDogs().then((dogs) => {
-        this.dogs = dogs;
-      });
+      this.getDogs()
+        .then((dogs) => {
+          this.dogs = dogs;
+        })
+        .then(() => (this.error = this.dogs[1].length === 0));
     },
   },
 };
