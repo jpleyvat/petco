@@ -1,7 +1,15 @@
 <template>
   <div class="card">
     <img :src="src" />
-    <div class="thumbnail">
+    <div
+      class="thumbnail"
+      v-bind:class="{
+        color1: color == 1,
+        color2: color == 2,
+        color3: color == 3,
+        color4: color == 4,
+      }"
+    >
       <h3>#{{ breed }}</h3>
     </div>
   </div>
@@ -15,6 +23,9 @@ export default {
   props: {
     src: String,
     breed: String,
+  },
+  computed: {
+    color: () => Math.floor(Math.random() * 4 + 1),
   },
   mounted() {
     const observer = this.getObserver();

@@ -1,5 +1,8 @@
 <template>
   <div id="search">
+    <div id="query" v-if="query">
+      <span v-on:click="setQuery('')">{{ query }}</span>
+    </div>
     <input
       type="text"
       placeholder="Sniff breeds..."
@@ -36,20 +39,15 @@ export default {
   methods: {
     ...mapActions([
       "getBreeds",
-      "fetchByBreed",
       "cleanDogs",
       "addDog",
       "addQuery",
+      "fetchByBreed",
+      "fetchRandomDog",
     ]),
     search(query) {
-      this.addQuery(query);
-      this.fetchByBreed(query)
-        .then((res) => res.data.message)
-        .then((data) => {
-          this.cleanDogs();
-          this.addDog(data);
-          this.setDogs();
-        });
+      this.query = query;
+      this.setQuery(query);
     },
 
     getMatches(value) {
@@ -77,6 +75,20 @@ export default {
     clean(e) {
       e.target.value = "";
       this.matches = [];
+    },
+
+    setQuery(query) {
+      this.query = query;
+      this.addQuery(query);
+      this.cleanDogs().then(() => {
+        const fetch = query ? this.fetchByBreed : this.fetchRandomDog;
+        fetch(query)
+          .then((res) => res.data.message)
+          .then((data) => {
+            this.addDog(data);
+            this.setDogs();
+          });
+      });
     },
   },
 };

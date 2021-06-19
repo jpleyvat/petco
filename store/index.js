@@ -1,14 +1,28 @@
 import axios from "axios";
+import Vue from "vue";
 
 export const state = () => ({
   dogs: [],
   breeds: [],
   query: "",
+  sorted: [],
+  dogsSets: {
+    1: [],
+    2: [],
+    3: [],
+    4: [],
+    5: [],
+    6: [],
+    7: [],
+  },
 });
 
 export const mutations = {
   addDogs(state, dog) {
     state.dogs.push(dog);
+  },
+  addToSorted(state, index) {
+    state.sorted.push(index);
   },
   setDogs(state, dogs) {
     state.dogs = dogs;
@@ -19,6 +33,17 @@ export const mutations = {
   setQuery(state, query) {
     state.query = query;
   },
+  addToDogsSets(state, { set, dog }) {
+    state.dogsSets[set].push(dog);
+  },
+  setSorted(state) {
+    state.sorted = [];
+  },
+  setDogsSets(state) {
+    Object.keys(state.dogsSets).forEach((key) => {
+      state.dogsSets[key] = [];
+    });
+  },
 };
 
 export const actions = {
@@ -26,8 +51,10 @@ export const actions = {
     await dispatch("fetchBreeds");
   },
 
-  cleanDogs({ commit }) {
+  cleanDogs({ commit, state }) {
+    commit("setDogsSets");
     commit("setDogs", []);
+    commit("setSorted");
   },
 
   // Fetch
@@ -62,8 +89,14 @@ export const actions = {
   },
 
   // Setters
-  addDog({ commit, dispatch }, src) {
-    dispatch("getDogWithBreed", src).then((dog) => commit("addDogs", dog));
+  addDog({ state, commit, dispatch }, src) {
+    dispatch("getDogWithBreed", src)
+      .then((dog) => {
+        commit("addDogs", dog);
+      })
+      .then(() => {
+        dispatch("sort");
+      });
   },
 
   addQuery({ commit }, query) {
@@ -77,7 +110,7 @@ export const actions = {
   },
 
   getDogs({ state }) {
-    return state.dogs;
+    return state.dogsSets;
   },
 
   getBreeds({ state }) {
@@ -86,5 +119,22 @@ export const actions = {
 
   getQuery({ state }) {
     return state.query;
+  },
+
+  sort({ state, commit }) {
+    if (state.dogs.length > 0) {
+      for (let i = 0; i < state.dogs.length; i++) {
+        if (i in state.sorted) continue;
+        let index = i + 1;
+        while (index >= 7) {
+          index -= 7;
+        }
+        const set = index <= 7 ? (index === 0 ? 7 : index) : index;
+
+        const dog = state.dogs[i];
+        commit("addToDogsSets", { set, dog });
+        commit("addToSorted", i);
+      }
+    }
   },
 };
