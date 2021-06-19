@@ -1,7 +1,7 @@
 * {
   box-sizing: border-box;
   color: #1c1c1c;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 16px;
   list-style: none;
   margin: 0;
@@ -67,7 +67,7 @@
 }
 
 #search #query span::before {
-  content: 'x';
+  content: "x";
   font-size: 2rem;
   margin: 0 0.5rem 0 0;
 }
@@ -126,6 +126,8 @@
 
 .card {
   align-items: center;
+  animation-name: appear;
+  animation-duration: 3s;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -154,7 +156,7 @@
   width: 100%;
 }
 .card .thumbnail::before {
-  content: '';
+  content: "";
   border-radius: 100%;
   width: 3rem;
   height: 3rem;
@@ -211,12 +213,13 @@
 
   #search #query span {
     font-size: 0.75rem;
+    left: 0;
     padding: 0 0.5rem;
     top: -2.5rem;
   }
 
   #search #query span::before {
-    content: 'x';
+    content: "x";
     font-size: 0.75rem;
   }
 
@@ -275,4 +278,15 @@
 .card .thumbnail::before {
   width: 1rem;
   height: 1rem;
+}
+
+/*----------------------- Animations */
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
