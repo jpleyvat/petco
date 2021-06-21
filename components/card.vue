@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from "vuex";
-import("intersection-observer");
+import { mapActions, mapMutations } from 'vuex';
+import('intersection-observer');
 
 export default {
   props: {
@@ -37,14 +37,7 @@ export default {
   },
   fetchOnServer: false,
   methods: {
-    ...mapActions([
-      "fetchRandomDog",
-      "fetchByBreed",
-      "addDog",
-      "getDogs",
-      "getQuery",
-      "getObserver",
-    ]),
+    ...mapActions(['fetchRandomDog', 'fetchByBreed', 'addDog', 'getDogs', 'getQuery']),
     getObserver() {
       return new window.IntersectionObserver((entries) => {
         const { isIntersecting } = entries[0];

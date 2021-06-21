@@ -10,21 +10,21 @@
       v-on:focusout="selectBreed"
     />
     <ul v-if="matches.length > 0">
-      <li v-for="breed of matches" v-on:click="selectBreed">
+      <li v-for="breed of matches" v-on:click="selectBreed" v-bind:key="breed">
         {{ breed }}
       </li>
     </ul>
   </div>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapActions } from 'vuex';
 
 export default {
   data() {
     return {
       breeds: [],
       matches: [],
-      query: "",
+      query: '',
     };
   },
   fetch() {
@@ -38,12 +38,12 @@ export default {
   },
   methods: {
     ...mapActions([
-      "getBreeds",
-      "cleanDogs",
-      "addDog",
-      "addQuery",
-      "fetchByBreed",
-      "fetchRandomDog",
+      'getBreeds',
+      'cleanDogs',
+      'addDog',
+      'addQuery',
+      'fetchByBreed',
+      'fetchRandomDog',
     ]),
     search(query) {
       this.query = query;
@@ -51,24 +51,26 @@ export default {
     },
 
     getMatches(value) {
-      value = value.replace(" ", "");
+      value = value.replace(' ', '');
       this.matches = this.breeds
-        .map((breed) => (breed.includes(value) ? breed : undefined))
+        .map((breed) =>
+          breed.includes(value.toLowerCase().replace(' ', '')) ? breed : undefined
+        )
         .filter((match) => match !== undefined);
     },
 
     handleKyepress(e) {
-      e.code === "Enter"
+      e.code === 'Enter'
         ? (this.search(e.target.value), this.clean(e))
         : this.getMatches(e.target.value);
     },
 
     selectBreed(e) {
-      let value = "";
+      let value = '';
       try {
         value = e.explicitOriginalTarget.data
-          ? e.explicitOriginalTarget.data.replace(/ /g, "").replace("\n", "")
-          : "";
+          ? e.explicitOriginalTarget.data.replace(/ /g, '').replace('\n', '')
+          : '';
         e.target.value = value.replace(/\b\w/g, (c) => c.toUpperCase());
       } catch {}
       if (value) this.search(value);
@@ -76,16 +78,16 @@ export default {
     },
 
     clean(e) {
-      e.target.value = "";
+      e.target.value = '';
       this.matches = [];
     },
 
     setQuery(query) {
-      this.query = query;
-      this.addQuery(query);
+      this.query = query.toLowerCase().replace(' ', '');
+      this.addQuery(this.query);
       this.cleanDogs().then(() => {
         const fetch = query ? this.fetchByBreed : this.fetchRandomDog;
-        fetch(query)
+        fetch(this.query)
           .then((res) => res.data.message)
           .then((data) => {
             this.addDog(data);

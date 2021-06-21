@@ -18,12 +18,12 @@
 </template>
 
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
 </style>
 
 <script>
-import { mapActions, mapMutations } from "vuex";
+import { mapActions } from 'vuex';
 
 export default {
   data() {
@@ -42,7 +42,7 @@ export default {
   },
   fetchOnServer: false,
   methods: {
-    ...mapActions(["fetchRandomDog", "addDog", "getDogs"]),
+    ...mapActions(['fetchRandomDog', 'addDog', 'getDogs']),
     setDogs() {
       this.getDogs()
         .then((dogs) => {
